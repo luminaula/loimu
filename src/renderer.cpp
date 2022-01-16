@@ -5,7 +5,7 @@
 
 namespace Renderer {
 std::vector<uint32_t> buffer[2];
-static int frame_idx = 0;
+static uint32_t frame_idx = 0;
 std::unique_ptr<std::jthread> worker_thread;
 
 using namespace std::literals::chrono_literals;
@@ -22,7 +22,7 @@ void worker(std::stop_token stop_token) {
         auto &next = grids[(grid_id + 1) % 2];
         next->update(cur);
         grid_id++;
-        std::this_thread::sleep_until(start_time + 16ms);
+        // std::this_thread::sleep_until(start_time + 16ms);
     }
 }
 

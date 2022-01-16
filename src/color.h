@@ -38,6 +38,10 @@ struct color_hsl {
     color_hsl(float hue_, float saturation_, float lumi_) : hue(hue_), saturation(saturation_), lumi(lumi_) {}
 
     void randomize(float color_hsl::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
+	void jitter_hue(float deviation){
+		randomize(&color_hsl::hue,hue,deviation);
+		hue = std::clamp(hue,0.0f,1.0f);
+	}
 
 };
 

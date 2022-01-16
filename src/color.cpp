@@ -76,7 +76,7 @@ uint32_t color_rgb::to_pixel() {
     uint8_t b = static_cast<uint8_t>(blue);
     uint8_t g = static_cast<uint8_t>(green);
     pix |= r << 16;
-    pix |= b << 8;
-    pix |= g;
+    pix |= g << 8;
+    pix |= b;
     return pix;
 }

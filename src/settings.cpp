@@ -6,6 +6,7 @@ namespace Settings{
 	static float desaturation;
 	static float delumination;
 	static float hue_jitter;
+	static float scatter;
 	static vec2 direction;
 	static color_hsl color;
 
@@ -19,6 +20,10 @@ namespace Settings{
 
 	float get_hue_jitter(){
 		return hue_jitter;
+	}
+
+	float get_scatter(){
+		return scatter;
 	}
 	
 
@@ -42,15 +47,19 @@ namespace Settings{
 		hue_jitter = val;
 	}
 
+	void set_scatter(float val){
+		scatter = val;
+	}
+
 	void set_direction(vec2 vec){
 		direction = vec;
 	}
 
-	void set_direction_x(float x){
+	void set_force_x(float x){
 		direction.x = x;
 	}
 
-	void set_direction_y(float y){
+	void set_force_y(float y){
 		direction.y = y;
 	}
 

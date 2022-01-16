@@ -8,26 +8,6 @@
 
 struct particle_cell_t {
     color_rgb rgb;
-    vec2 force;
-    vec2 accum;
-
-    particle_cell_t &operator+=(const particle_cell_t &other) {
-        rgb += other.rgb;
-        return *this;
-    }
-
-    friend particle_cell_t operator+(particle_cell_t left, const particle_cell_t &right) {
-        left.rgb += right.rgb;
-        return left;
-    }
-    particle_cell_t &operator/=(float val) {
-        rgb /= val;
-        return *this;
-    }
-    friend particle_cell_t operator/(particle_cell_t left, const float &val) {
-        left.rgb /= val;
-        return left;
-    }
 };
 
 class ParticleGrid {

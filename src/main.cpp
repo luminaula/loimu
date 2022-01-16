@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
-    Renderer::init();
+    Renderer::init(400,400);
     Window win(nullptr);
     win.show();
     QCoreApplication::setApplicationName("supkt");

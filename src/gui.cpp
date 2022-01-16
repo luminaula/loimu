@@ -8,8 +8,6 @@
 
 Window::Window(QWidget *parent) : QWidget(parent), image() {
     render_obj = new QLabel(this);
-    render_obj->setFixedSize(800,800);
-    render_obj->setPixmap(pix_map);
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(render_obj);
     layout->addWidget(new SettingsWidget);

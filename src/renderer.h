@@ -1,12 +1,11 @@
 #pragma once
 
-#include "framebuffer.h"
 #include "particlegrid.h"
 #include <QImage>
 
 namespace Renderer {
 
-void init();
+void init(int width_, int height_);
 void to_qimage(QImage &image);
 
 void update(ParticleGrid *grid);

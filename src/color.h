@@ -36,11 +36,9 @@ struct color_hsl {
     color_hsl() = default;
     color_hsl(const color_rgb &rgb);
     color_hsl(float hue_, float saturation_, float lumi_) : hue(hue_), saturation(saturation_), lumi(lumi_) {}
-    void hue_rand(float mean, float dev) { hue = rand_value_normal(mean, dev); }
 
     void randomize(float color_hsl::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
 
-    color_rgb to_rgb();
 };
 
 struct color_rgb {
@@ -51,7 +49,6 @@ struct color_rgb {
     color_rgb(float r, float g, float b) : red(r), green(g), blue(b) {}
     color_rgb(const color_hsl &hsl);
 
-    color_hsl to_hsl();
 
     color_rgb &operator+=(const color_rgb &right) {
         red += right.red;
@@ -73,6 +70,11 @@ struct color_rgb {
         blue /= val;
         return *this;
     }
+
+	friend color_rgb operator/(color_rgb left, const float &val){
+		left /= val;
+		return left;
+	}
 
     uint32_t to_pixel();
 };

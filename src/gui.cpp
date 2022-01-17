@@ -19,3 +19,8 @@ void Window::paintEvent(QPaintEvent *event) {
     render_obj->setPixmap(QPixmap::fromImage(image));
     render_obj->update();
 }
+
+void Window::closeEvent(QCloseEvent *event){
+    Renderer::deinit();
+}
+

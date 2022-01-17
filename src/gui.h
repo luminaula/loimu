@@ -11,6 +11,7 @@ class Window : public QWidget {
     Window(QWidget *parent);
   private slots:
     void paintEvent(QPaintEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
   private:
     QPixmap pix_map;

@@ -44,6 +44,8 @@ struct color_hsl {
         this->*variable = std::clamp(this->*variable,0.0f,1.0f);
     }
 
+    
+
 };
 
 struct color_rgb {
@@ -82,4 +84,21 @@ struct color_rgb {
 	}
 
     uint32_t to_pixel();
+
+    void randomize(float color_rgb::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
+
+    void jitter(float color_rgb::*variable, float deviation){
+        randomize(variable,this->*variable,deviation);
+        this->*variable = std::clamp(this->*variable,0.0f,255.0f);
+    }
+
+    void jitter_all(float deviation){
+        red = rand_value(red - deviation, red + deviation);
+        red = std::clamp(red,0.0f,255.0f);
+        green = rand_value(green - deviation, green + deviation);
+        green = std::clamp(green,0.0f,255.0f);
+        blue = rand_value(blue - deviation, blue + deviation);
+        blue = std::clamp(blue,0.0f,255.0f);
+    }
+
 };

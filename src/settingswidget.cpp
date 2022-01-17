@@ -39,7 +39,7 @@ SettingsWidget::SettingsWidget(QWidget *parent) : QWidget(parent){
 
 	delumination_text->setText("Fade");
 	delumination_slider->setOrientation(Qt::Orientation::Horizontal);
-	delumination_slider->setRange(0,400);
+	delumination_slider->setRange(0,1000);
 	connect(delumination_slider, &QSlider::valueChanged,this,[=](int value){
 		float delumination_value = (float)value / 10000.0f;
 		Settings::set_delumination(delumination_value);
@@ -54,43 +54,43 @@ SettingsWidget::SettingsWidget(QWidget *parent) : QWidget(parent){
 	QHBoxLayout *desaturation_layout = new QHBoxLayout;
 	desaturation_text->setText("Smoke");
 	desaturation_slider->setOrientation(Qt::Orientation::Horizontal);
-	desaturation_slider->setRange(0,200);
+	desaturation_slider->setRange(0,10000);
 	connect(desaturation_slider,&QSlider::valueChanged,this,[=](int value){
 		float desaturation_value = (float)value / 10000.0f;
 		Settings::set_desaturation(desaturation_value);
 	});
-	desaturation_slider->setValue(100);
+	desaturation_slider->setValue(1000);
 	desaturation_layout->addWidget(desaturation_text);
 	desaturation_layout->addWidget(desaturation_slider);
 	layout->addLayout(desaturation_layout);
 
 
-	QSlider *hue_jitter_slider = new QSlider;
-	QLabel *hue_jitter_text = new QLabel;
-	QHBoxLayout *hue_jitter_layout = new QHBoxLayout;
-	hue_jitter_text->setText("Color variance");
-	hue_jitter_slider->setOrientation(Qt::Orientation::Horizontal);
-	hue_jitter_slider->setRange(0,3000);
-	connect(hue_jitter_slider,&QSlider::valueChanged,this,[=](int value){
+	QSlider *color_jitter_slider = new QSlider;
+	QLabel *color_jitter_text = new QLabel;
+	QHBoxLayout *color_jitter_layout = new QHBoxLayout;
+	color_jitter_text->setText("Color variance");
+	color_jitter_slider->setOrientation(Qt::Orientation::Horizontal);
+	color_jitter_slider->setRange(0,1000);
+	connect(color_jitter_slider,&QSlider::valueChanged,this,[=](int value){
 		float jitter_value = (float)value / 10000.0f;
-		Settings::set_hue_jitter(jitter_value);
+		Settings::set_color_jitter(jitter_value);
 	});
-	hue_jitter_slider->setValue(1000);
-	hue_jitter_layout->addWidget(hue_jitter_text);
-	hue_jitter_layout->addWidget(hue_jitter_slider);
-	layout->addLayout(hue_jitter_layout);
+	color_jitter_slider->setValue(500);
+	color_jitter_layout->addWidget(color_jitter_text);
+	color_jitter_layout->addWidget(color_jitter_slider);
+	layout->addLayout(color_jitter_layout);
 
 	QSlider *scatter_slider = new QSlider;
 	QLabel *scatter_text = new QLabel;
 	QHBoxLayout *scatter_layout = new QHBoxLayout;
 	scatter_text->setText("Scatter");
 	scatter_slider->setOrientation(Qt::Orientation::Horizontal);
-	scatter_slider->setRange(0,2000);
+	scatter_slider->setRange(1000,20000);
 	connect(scatter_slider,&QSlider::valueChanged,this,[=](int value){
-		float scatter_value = (float)value / 100.0f;
+		float scatter_value = (float)value / 1000.0f;
 		Settings::set_scatter(scatter_value);
 	});
-	scatter_slider->setValue(500);
+	scatter_slider->setValue(2000);
 	scatter_layout->addWidget(scatter_text);
 	scatter_layout->addWidget(scatter_slider);
 	layout->addLayout(scatter_layout);

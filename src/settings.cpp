@@ -5,7 +5,7 @@
 namespace Settings{
 	static float desaturation;
 	static float delumination;
-	static float hue_jitter;
+	static float color_jitter;
 	static float scatter;
 	static vec2 direction;
 	static color_hsl color;
@@ -18,8 +18,8 @@ namespace Settings{
 		return delumination;
 	}
 
-	float get_hue_jitter(){
-		return hue_jitter;
+	float get_color_jitter(){
+		return color_jitter;
 	}
 
 	float get_scatter(){
@@ -43,8 +43,8 @@ namespace Settings{
 		delumination = val;
 	}
 
-	void set_hue_jitter(float val){
-		hue_jitter = val;
+	void set_color_jitter(float val){
+		color_jitter = val;
 	}
 
 	void set_scatter(float val){

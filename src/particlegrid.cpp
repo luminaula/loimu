@@ -13,19 +13,19 @@ std::vector<std::pair<int, int>> get_dispersion_indices(vec2 direction) {
             int start_pos = direction.x - width / 2;
             int end_pos = direction.x + width / 2;
             for (int i = start_pos; i <= end_pos; i++) {
-                indices.push_back({i, (int)direction.y});
+                indices.push_back({i, std::ceil(direction.y)});
             }
             direction.x -= 1.0f;
         } else if (direction.x <= -0.5f) {
             int start_pos = direction.x + width / 2;
             int end_pos = direction.x - width / 2;
             for (int i = start_pos; i >= end_pos; i--) {
-                indices.push_back({i, (int)direction.y});
+                indices.push_back({i, std::ceil(direction.y)});
             }
             direction.x += 1.0;
         } else {
             for (int i = -1; i <= 1; i++) {
-                indices.push_back({i, (int)direction.y});
+                indices.push_back({i, std::ceil(direction.y)});
             }
         }
 
@@ -38,33 +38,33 @@ std::vector<std::pair<int, int>> get_dispersion_indices(vec2 direction) {
     return indices;
 }
 
-void ParticleGrid::update_particle_rows(ParticleGrid &next, int lower, int upper) {}
-
-void ParticleGrid::update_particles(ParticleGrid &next) {
+void ParticleGrid::spawn_fire(){
     auto direction = Settings::get_direction();
-    next.cells = std::vector<particle_cell_t>(width * height);
     for (int y = 0; y < (int)std::ceil(direction.y); y++) {
-        for (int i = 0; i < next.width; i++) {
+        for (int i = 0; i < width; i++) {
             color_hsl color = Settings::get_color();
             color.jitter(&color_hsl::hue, Settings::get_color_jitter());
-            color.jitter(&color_hsl::lumi, 0.1f);
-            auto &cell = get_cell(i, next.height - y);
+            color.jitter(&color_hsl::lumi, 0.2f);
+            auto &cell = get_cell(i, height - y);
             cell.value = color;
         }
     }
-    // race condition for effects is a dirty hack
-    //  #pragma omp parallel for
-    for (int y = 0; y < next.height; y++) {
-        float current_height = next.height - y;
+}
+
+
+void ParticleGrid::update_particle_rows(ParticleGrid &next, int lower, int upper) {
+    auto direction = Settings::get_direction();
+    for (int y = lower; y < std::min(upper,next.height); y++) {
+        float current_height = height - y;
         for (int x = 0; x < next.width; x++) {
             auto &cell = get_cell(x, y);
-            cell.value.jitter_all(Settings::get_color_jitter() * 10);
             float value_average = (cell.value.red + cell.value.blue + cell.value.green) / 3.0f;
             if (value_average < 1.0f) {
                 continue;
             }
+            cell.value.jitter_all(Settings::get_color_jitter());
             direction = Settings::get_direction();
-            direction.x *= current_height / next.height;
+            direction.x *= current_height * 2.0 / (float)next.height;
             if (x % 2) {
                 direction.x += Settings::get_scatter();
             } else {
@@ -96,7 +96,19 @@ void ParticleGrid::update_particles(ParticleGrid &next) {
             }
         }
     }
+    
+}
+
+void ParticleGrid::update_particles(ParticleGrid &next) {
+    
+    update_particle_rows(next,0,next.height);
+
+    
+}
+
+void ParticleGrid::update_framebuffer(){
     for (int i = 0; i < width * height; i++) {
-        next.buffer[i] = next.cells[i].value.to_pixel();
+        buffer[i] = cells[i].value.to_pixel();
     }
 }
+

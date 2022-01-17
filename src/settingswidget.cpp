@@ -70,7 +70,7 @@ SettingsWidget::SettingsWidget(QWidget *parent) : QWidget(parent){
 	QHBoxLayout *color_jitter_layout = new QHBoxLayout;
 	color_jitter_text->setText("Color variance");
 	color_jitter_slider->setOrientation(Qt::Orientation::Horizontal);
-	color_jitter_slider->setRange(0,1000);
+	color_jitter_slider->setRange(0,2500);
 	connect(color_jitter_slider,&QSlider::valueChanged,this,[=](int value){
 		float jitter_value = (float)value / 10000.0f;
 		Settings::set_color_jitter(jitter_value);
@@ -85,7 +85,7 @@ SettingsWidget::SettingsWidget(QWidget *parent) : QWidget(parent){
 	QHBoxLayout *scatter_layout = new QHBoxLayout;
 	scatter_text->setText("Scatter");
 	scatter_slider->setOrientation(Qt::Orientation::Horizontal);
-	scatter_slider->setRange(1000,20000);
+	scatter_slider->setRange(0,4000);
 	connect(scatter_slider,&QSlider::valueChanged,this,[=](int value){
 		float scatter_value = (float)value / 1000.0f;
 		Settings::set_scatter(scatter_value);

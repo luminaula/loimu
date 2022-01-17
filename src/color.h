@@ -93,11 +93,11 @@ struct color_rgb {
     }
 
     void jitter_all(float deviation){
-        red = rand_value(red - deviation, red + deviation);
+        red = rand_value_normal(red, red * deviation);
         red = std::clamp(red,0.0f,255.0f);
-        green = rand_value(green - deviation, green + deviation);
+        green = rand_value_normal(green, green * deviation);
         green = std::clamp(green,0.0f,255.0f);
-        blue = rand_value(blue - deviation, blue + deviation);
+        blue = rand_value_normal(blue, blue * deviation);
         blue = std::clamp(blue,0.0f,255.0f);
     }
 

@@ -53,8 +53,8 @@ set(CMAKE_C_FLAGS_DEBUG   "-O0 -ggdb3 -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb3 -Wall -Wextra")
 
 #release build
-set(CMAKE_C_FLAGS_RELEASE   "-O3 -march=native")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native")
+set(CMAKE_C_FLAGS_RELEASE   "-Ofast -march=native")
+set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -march=native")
 
 #release debug build
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O3 -ggdb3")

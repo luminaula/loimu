@@ -8,7 +8,8 @@ namespace Settings{
 	static float color_jitter;
 	static float scatter;
 	static vec2 direction;
-	static color_hsl color;
+	static color_hsl hsl;
+	static color_rgb rgb;
 
 	float get_desaturation(){
 		return desaturation;
@@ -32,7 +33,7 @@ namespace Settings{
 	}
 
 	color_hsl get_color(){
-		return color;
+		return hsl;
 	}
 
 	void set_desaturation(float val){
@@ -64,7 +65,7 @@ namespace Settings{
 	}
 
 	void set_color(color_hsl col){
-		color = col;
+		hsl = col;
 	}
 
 }

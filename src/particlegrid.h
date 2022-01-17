@@ -24,7 +24,10 @@ class ParticleGrid {
   public:
     ParticleGrid(int width_, int height_) : width(width_), height(height_), cells(width * height), buffer(width * height) {}
     particle_cell_t &get_cell(int x, int y) { return cells[std::clamp(y, 0, height - 1) * width + std::clamp(x, 0, width - 1)]; }
+    void clear(){cells = std::vector<particle_cell_t>(width * height);}
 
+
+    void spawn_fire();
     void update_particle_rows(ParticleGrid &next, int lower, int upper);
     void update_particles(ParticleGrid &next);
     void update_framebuffer();

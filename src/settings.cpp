@@ -9,6 +9,7 @@ static float desaturation;
 static float delumination;
 static float color_jitter;
 static float scatter;
+static float fire_width;
 static bool snow;
 static vec2 direction;
 static color_hsl hsl;
@@ -21,6 +22,8 @@ float get_delumination() { return delumination; }
 float get_color_jitter() { return color_jitter; }
 
 float get_scatter() { return scatter; }
+
+float get_fire_width() { return fire_width; }
 
 vec2 get_direction() { return direction; }
 
@@ -35,6 +38,8 @@ void set_delumination(float val) { delumination = val; }
 void set_color_jitter(float val) { color_jitter = val; }
 
 void set_scatter(float val) { scatter = val; }
+
+void set_fire_width(float val) { fire_width = val; }
 
 void set_direction(vec2 vec) { direction = vec; }
 

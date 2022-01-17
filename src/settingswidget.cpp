@@ -121,6 +121,21 @@ SettingsWidget::SettingsWidget(QWidget *parent) : QWidget(parent) {
     x_layout->addWidget(x_slider);
     layout->addLayout(x_layout);
 
+	QSlider *fire_width_slider = new QSlider;
+    QLabel *fire_width_text = new QLabel;
+    QHBoxLayout *fire_width_layout = new QHBoxLayout;
+    fire_width_text->setText("Fire width");
+    fire_width_slider->setOrientation(Qt::Orientation::Horizontal);
+    fire_width_slider->setRange(10, 1000);
+    connect(fire_width_slider, &QSlider::valueChanged, this, [=](int value) {
+        float fire_width_value = (float)value / 1001.0f;
+        Settings::set_fire_width(fire_width_value);
+    });
+    fire_width_slider->setValue(500);
+    fire_width_layout->addWidget(fire_width_text);
+    fire_width_layout->addWidget(fire_width_slider);
+    layout->addLayout(fire_width_layout);
+
     QPushButton *snow_button = new QPushButton;
     snow_button->setText("Snow");
     connect(snow_button, &QPushButton::clicked, this, [=]() { Settings::set_snow(!Settings::get_snow()); });

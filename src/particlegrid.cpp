@@ -42,8 +42,11 @@ std::vector<std::pair<int, int>> get_dispersion_indices(vec2 direction) {
 
 void ParticleGrid::spawn_fire() {
     auto direction = Settings::get_direction();
+    float fire_width = Settings::get_fire_width();
+    float fire_start = (1.0f - fire_width) / 2.0f;
+    float fire_end = fire_start + fire_width;
     for (int y = 0; y < (int)std::ceil(direction.y); y++) {
-        for (int i = 0; i < width; i++) {
+        for (int i = fire_start * width; i < width * fire_end; i++) {
             color_hsl color = Settings::get_color();
             color.jitter(&color_hsl::hue, Settings::get_color_jitter());
             color.jitter(&color_hsl::lumi, 0.2f);

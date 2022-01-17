@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <QWidget>
 
+namespace Lumi {
+
 class Window : public QWidget {
     Q_OBJECT
   public:
@@ -18,3 +20,4 @@ class Window : public QWidget {
     QImage image;
     QLabel *render_obj;
 };
+} // namespace Lumi

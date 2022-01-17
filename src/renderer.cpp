@@ -1,38 +1,37 @@
 #include "renderer.h"
+#include "snow.h"
+#include <barrier>
 #include <chrono>
+#include <list>
 #include <memory>
 #include <thread>
 #include <vector>
-#include <condition_variable>
-#include <mutex>
-#include <atomic>
-#include <barrier>
+
+namespace Lumi {
 
 namespace Renderer {
 static uint32_t frame_idx = 0;
-static int width,height;
+static int width, height;
 std::vector<ParticleGrid> grids;
+std::list<Lumi::Snow> snow_flakes;
 
 std::unique_ptr<std::jthread> worker_thread;
 std::vector<std::jthread> subworkers;
-std::atomic_bool ready_to_work = false;
 
 std::barrier work_barrier(std::thread::hardware_concurrency() + 1);
 
 using namespace std::literals::chrono_literals;
 
-static void sub_worker(std::stop_token stop_token, int low, int high){
-    while(!stop_token.stop_requested()){
+static void sub_worker(std::stop_token stop_token, int low, int high) {
+    while (!stop_token.stop_requested()) {
         work_barrier.arrive_and_wait();
         auto &cur = grids[frame_idx % 2];
         auto &next = grids[(frame_idx + 1) % 2];
-        cur.update_particle_rows(next,low,high);
-        if(stop_token.stop_requested()){
+        cur.update_particle_rows(next, low, high);
+        if (stop_token.stop_requested()) {
             break;
         }
         work_barrier.arrive_and_wait();
-
-
     }
 }
 
@@ -46,10 +45,11 @@ static void worker(std::stop_token stop_token) {
         cur.spawn_fire();
         work_barrier.arrive_and_wait();
         work_barrier.arrive_and_wait();
-        next.update_framebuffer();  
+        next.update_framebuffer();
+        next.update_snow(snow_flakes);
         std::this_thread::sleep_until(start_time + 16ms);
     }
-    for(auto &thread : subworkers){
+    for (auto &thread : subworkers) {
         thread.request_stop();
     }
     work_barrier.arrive_and_drop();
@@ -58,18 +58,18 @@ static void worker(std::stop_token stop_token) {
 void init(int width_, int height_) {
     width = width_;
     height = height_;
-    grids.push_back(ParticleGrid(width,height));
-    grids.push_back(ParticleGrid(width,height));
+    grids.push_back(ParticleGrid(width, height));
+    grids.push_back(ParticleGrid(width, height));
     int work_step = height / std::thread::hardware_concurrency() + 1;
     int low = 0;
-    for(int i=0;i< std::thread::hardware_concurrency();i++){
-        subworkers.push_back(std::jthread(sub_worker,low,low+work_step));
+    for (int i = 0; i < std::thread::hardware_concurrency(); i++) {
+        subworkers.push_back(std::jthread(sub_worker, low, low + work_step));
         low += work_step;
     }
     worker_thread = std::make_unique<std::jthread>(worker);
 }
 
-void deinit(){
+void deinit() {
     worker_thread->request_stop();
     worker_thread->join();
 }
@@ -77,16 +77,7 @@ void deinit(){
 void to_qimage(QImage &image) {
     auto &grid = grids[frame_idx % 2];
     image = QImage((uint8_t *)grid.get_framebuffer().data(), width, height, QImage::Format_ARGB32);
-
 }
 
-// void update(ParticleGrid<color_rgb> *grid) {
-//     auto &buf = buffer[(frame_idx+1) % 2];
-//     for (size_t y = 0; y < height; y++) {
-//         for (int x = 0; x < width; x++) {
-//             buf[y * width + x] = grid->get_cell(x, y).value.to_pixel();
-//         }
-//     }
-//     frame_idx++;
-// }
 } // namespace Renderer
+} // namespace Lumi

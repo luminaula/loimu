@@ -3,6 +3,7 @@
 #include "color.h"
 #include "particlegrid.h"
 #include <QImage>
+namespace Lumi {
 
 namespace Renderer {
 
@@ -11,3 +12,4 @@ void deinit();
 void to_qimage(QImage &image);
 
 } // namespace Renderer
+} // namespace Lumi

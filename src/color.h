@@ -5,6 +5,8 @@
 #include <random>
 #include <stdint.h>
 
+namespace Lumi {
+
 struct color_hsl;
 struct color_rgb;
 
@@ -39,13 +41,10 @@ struct color_hsl {
 
     void randomize(float color_hsl::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
 
-    void jitter(float color_hsl::*variable, float deviation){
-        randomize(variable,this->*variable,deviation);
-        this->*variable = std::clamp(this->*variable,0.0f,1.0f);
+    void jitter(float color_hsl::*variable, float deviation) {
+        randomize(variable, this->*variable, deviation);
+        this->*variable = std::clamp(this->*variable, 0.0f, 1.0f);
     }
-
-    
-
 };
 
 struct color_rgb {
@@ -55,7 +54,6 @@ struct color_rgb {
     color_rgb() = default;
     color_rgb(float r, float g, float b) : red(r), green(g), blue(b) {}
     color_rgb(const color_hsl &hsl);
-
 
     color_rgb &operator+=(const color_rgb &right) {
         red += right.red;
@@ -78,27 +76,27 @@ struct color_rgb {
         return *this;
     }
 
-	friend color_rgb operator/(color_rgb left, const float &val){
-		left /= val;
-		return left;
-	}
+    friend color_rgb operator/(color_rgb left, const float &val) {
+        left /= val;
+        return left;
+    }
 
     uint32_t to_pixel();
 
     void randomize(float color_rgb::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
 
-    void jitter(float color_rgb::*variable, float deviation){
-        randomize(variable,this->*variable,deviation);
-        this->*variable = std::clamp(this->*variable,0.0f,255.0f);
+    void jitter(float color_rgb::*variable, float deviation) {
+        randomize(variable, this->*variable, deviation);
+        this->*variable = std::clamp(this->*variable, 0.0f, 255.0f);
     }
 
-    void jitter_all(float deviation){
+    void jitter_all(float deviation) {
         red = rand_value_normal(red, red * deviation);
-        red = std::clamp(red,0.0f,255.0f);
+        red = std::clamp(red, 0.0f, 255.0f);
         green = rand_value_normal(green, green * deviation);
-        green = std::clamp(green,0.0f,255.0f);
+        green = std::clamp(green, 0.0f, 255.0f);
         blue = rand_value_normal(blue, blue * deviation);
-        blue = std::clamp(blue,0.0f,255.0f);
+        blue = std::clamp(blue, 0.0f, 255.0f);
     }
-
 };
+} // namespace Lumi

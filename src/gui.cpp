@@ -1,10 +1,12 @@
 
 #include "gui.h"
 #include "renderer.h"
+#include "settingswidget.h"
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <iostream>
-#include "settingswidget.h"
+
+namespace Lumi {
 
 Window::Window(QWidget *parent) : QWidget(parent), image() {
     render_obj = new QLabel(this);
@@ -20,7 +22,6 @@ void Window::paintEvent(QPaintEvent *event) {
     render_obj->update();
 }
 
-void Window::closeEvent(QCloseEvent *event){
-    Renderer::deinit();
-}
+void Window::closeEvent(QCloseEvent *event) { Renderer::deinit(); }
 
+} // namespace Lumi

@@ -11,8 +11,8 @@
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
-    Renderer::init(800,800);
-    Window win(nullptr);
+    Lumi::Renderer::init(800, 800);
+    Lumi::Window win(nullptr);
     win.show();
     QCoreApplication::setApplicationName("supkt");
     QCoreApplication::setOrganizationName("Lumi");

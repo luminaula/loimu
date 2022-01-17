@@ -1,6 +1,8 @@
 #include "color.h"
 #include <stddef.h>
 
+namespace Lumi {
+
 color_hsl::color_hsl(const color_rgb &rgb) {
     float value_max, value_min;
     float r = rgb.red / 255.0f;
@@ -72,11 +74,12 @@ color_rgb::color_rgb(const color_hsl &hsl) {
 
 uint32_t color_rgb::to_pixel() {
     uint32_t pix = 0xFF000000;
-    uint8_t r = static_cast<uint8_t>(std::clamp(red,0.0f,255.0f));
-    uint8_t b = static_cast<uint8_t>(std::clamp(blue,0.0f,255.0f));
-    uint8_t g = static_cast<uint8_t>(std::clamp(green,0.0f,255.0f));
+    uint8_t r = static_cast<uint8_t>(std::clamp(red, 0.0f, 255.0f));
+    uint8_t b = static_cast<uint8_t>(std::clamp(blue, 0.0f, 255.0f));
+    uint8_t g = static_cast<uint8_t>(std::clamp(green, 0.0f, 255.0f));
     pix |= r << 16;
     pix |= g << 8;
     pix |= b;
     return pix;
 }
+} // namespace Lumi

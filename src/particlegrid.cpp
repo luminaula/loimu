@@ -52,27 +52,28 @@ void ParticleGrid::spawn_fire() {
             color.jitter(&color_hsl::lumi, 0.2f);
             auto &cell = get_cell(i, height - y);
             cell.value = color;
+            cell.force = direction;
         }
     }
 }
 
-void ParticleGrid::update_particle_rows(ParticleGrid &next, int lower, int upper) {
-    auto direction = Settings::get_direction();
-    for (int y = lower; y < std::min(upper, next.height); y++) {
+void ParticleGrid::update_particle_block(ParticleGrid &next, Rectangle rect){
+    auto dir = Settings::get_direction();
+    for (int y = rect.y0; y < std::min(rect.y1, next.height); y++) {
         float current_height = height - y;
-        for (int x = 0; x < next.width; x++) {
+        for (int x = rect.x0; x < std::min(rect.x1, next.width); x++) {
             auto &cell = get_cell(x, y);
             float value_average = (cell.value.red + cell.value.blue + cell.value.green) / 3.0f;
             if (value_average < 1.0f) {
                 continue;
             }
             cell.value.jitter_all(Settings::get_color_jitter());
-            direction = Settings::get_direction();
-            direction.x *= current_height * 2.0 / (float)next.height;
+            cell.force.x = dir.x;
+            cell.force.x *= current_height * 2.0 / (float)next.height;
             if (x % 2) {
-                direction.x += Settings::get_scatter();
+                cell.force.x += Settings::get_scatter();
             } else {
-                direction.x -= Settings::get_scatter();
+                cell.force.x -= Settings::get_scatter();
             }
 
             cell.value /= (1.0f + Settings::get_delumination());
@@ -89,17 +90,25 @@ void ParticleGrid::update_particle_rows(ParticleGrid &next, int lower, int upper
             desaturate(cell.value.blue, value_average, desaturation);
             desaturate(cell.value.green, value_average, desaturation);
 
-            auto dispersion_indices = get_dispersion_indices(direction);
+            auto dispersion_indices = get_dispersion_indices(cell.force);
             if (dispersion_indices.empty()) {
                 continue;
             }
             cell.value /= dispersion_indices.size();
+            
             for (auto &disp : dispersion_indices) {
                 auto &cell_next = next.get_cell(x + disp.first, y - disp.second);
                 cell_next.value += cell.value;
+                cell_next.force.y = dir.y;
             }
         }
     }
+}
+
+
+void ParticleGrid::update_particle_rows(ParticleGrid &next, int lower, int upper) {
+    Rectangle update_area(0,lower,width,upper);
+    update_particle_block(next,update_area);
 }
 
 void ParticleGrid::update_particles(ParticleGrid &next) { update_particle_rows(next, 0, next.height); }

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 #setup project
-set(project_name            supkt)
+set(project_name            loimu)
 project(${project_name})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

@@ -24,7 +24,7 @@ struct Rectangle{
 };
 
 struct ParticleCell {
-    color_rgb value;
+    ColorRgb value;
     vec2 force;
 };
 

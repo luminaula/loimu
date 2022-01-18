@@ -7,8 +7,8 @@
 
 namespace Lumi {
 
-struct color_hsl;
-struct color_rgb;
+struct ColorHsl;
+struct ColorRgb;
 
 template <std::floating_point T> T rand_value_normal(T mean, T deviation) {
     static std::random_device rd{};
@@ -31,61 +31,61 @@ template <std::floating_point T> T rand_value(T low, T high) {
     return static_cast<T>(rand()) / RAND_MAX * (high - low) + low;
 }
 
-struct color_hsl {
+struct ColorHsl {
     float hue;
     float saturation;
     float lumi;
-    color_hsl() = default;
-    color_hsl(const color_rgb &rgb);
-    color_hsl(float hue_, float saturation_, float lumi_) : hue(hue_), saturation(saturation_), lumi(lumi_) {}
+    ColorHsl() = default;
+    ColorHsl(const ColorRgb &rgb);
+    ColorHsl(float hue_, float saturation_, float lumi_) : hue(hue_), saturation(saturation_), lumi(lumi_) {}
 
-    void randomize(float color_hsl::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
+    void randomize(float ColorHsl::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
 
-    void jitter(float color_hsl::*variable, float deviation) {
+    void jitter(float ColorHsl::*variable, float deviation) {
         randomize(variable, this->*variable, deviation);
         this->*variable = std::clamp(this->*variable, 0.0f, 1.0f);
     }
 };
 
-struct color_rgb {
+struct ColorRgb {
     float red;
     float green;
     float blue;
-    color_rgb() = default;
-    color_rgb(float r, float g, float b) : red(r), green(g), blue(b) {}
-    color_rgb(const color_hsl &hsl);
+    ColorRgb() = default;
+    ColorRgb(float r, float g, float b) : red(r), green(g), blue(b) {}
+    ColorRgb(const ColorHsl &hsl);
 
-    color_rgb &operator+=(const color_rgb &right) {
+    ColorRgb &operator+=(const ColorRgb &right) {
         red += right.red;
         green += right.green;
         blue += right.blue;
         return *this;
     }
 
-    friend color_rgb operator+(color_rgb left, const color_rgb &right) {
+    friend ColorRgb operator+(ColorRgb left, const ColorRgb &right) {
         left.red += right.red;
         left.green += right.green;
         left.blue += right.blue;
         return left;
     }
 
-    color_rgb &operator/=(float val) {
+    ColorRgb &operator/=(float val) {
         red /= val;
         green /= val;
         blue /= val;
         return *this;
     }
 
-    friend color_rgb operator/(color_rgb left, const float &val) {
+    friend ColorRgb operator/(ColorRgb left, const float &val) {
         left /= val;
         return left;
     }
 
     uint32_t to_pixel();
 
-    void randomize(float color_rgb::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
+    void randomize(float ColorRgb::*variable, float mean, float deviation) { this->*variable = rand_value_normal(mean, deviation); }
 
-    void jitter(float color_rgb::*variable, float deviation) {
+    void jitter(float ColorRgb::*variable, float deviation) {
         randomize(variable, this->*variable, deviation);
         this->*variable = std::clamp(this->*variable, 0.0f, 255.0f);
     }

@@ -13,7 +13,7 @@ float get_color_jitter();
 float get_scatter();
 float get_fire_width();
 vec2 get_direction();
-color_hsl get_color();
+ColorHsl get_color();
 
 bool get_snow();
 
@@ -25,7 +25,7 @@ void set_fire_width(float val);
 void set_direction(vec2 vec);
 void set_force_x(float x);
 void set_force_y(float y);
-void set_color(color_hsl color);
+void set_color(ColorHsl color);
 
 void set_snow(bool val);
 } // namespace Settings

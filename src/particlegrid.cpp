@@ -47,9 +47,9 @@ void ParticleGrid::spawn_fire() {
     float fire_end = fire_start + fire_width;
     for (int y = 0; y < (int)std::ceil(direction.y); y++) {
         for (int i = fire_start * width; i < width * fire_end; i++) {
-            color_hsl color = Settings::get_color();
-            color.jitter(&color_hsl::hue, Settings::get_color_jitter());
-            color.jitter(&color_hsl::lumi, 0.2f);
+            ColorHsl color = Settings::get_color();
+            color.jitter(&ColorHsl::hue, Settings::get_color_jitter());
+            color.jitter(&ColorHsl::lumi, 0.2f);
             auto &cell = get_cell(i, height - y);
             cell.value = color;
             cell.force = direction;
@@ -122,7 +122,7 @@ void ParticleGrid::update_framebuffer() {
 void ParticleGrid::update_snow(std::list<Lumi::Snow> &snow) {
     for (auto flake = snow.begin(); flake != snow.end(); flake++) {
         auto &cell = get_cell((*flake).x, (*flake).y);
-        color_hsl hsl = cell.value;
+        ColorHsl hsl = cell.value;
         if ((*flake).y >= height - 10 || (*flake).x >= width - 12  || (*flake).x <= 12 || hsl.lumi > 0.05 ) {
             auto iter_copy = flake;
             flake++;

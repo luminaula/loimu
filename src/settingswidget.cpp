@@ -20,8 +20,8 @@ SettingsWidget::SettingsWidget(QWidget *parent) : QWidget(parent) {
     connect(color_picker, &QColorDialog::currentColorChanged, this, [=](const QColor &color) {
         int r, g, b;
         color.getRgb(&r, &g, &b);
-        color_rgb rgb((float)r, (float)g, (float)b);
-        Settings::set_color(color_hsl(rgb));
+        ColorRgb rgb((float)r, (float)g, (float)b);
+        Settings::set_color(ColorHsl(rgb));
     });
     QColor start_color;
     start_color.setRed(255);

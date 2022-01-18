@@ -12,8 +12,8 @@ static float scatter;
 static float fire_width;
 static bool snow;
 static vec2 direction;
-static color_hsl hsl;
-static color_rgb rgb;
+static ColorHsl hsl;
+static ColorRgb rgb;
 
 float get_desaturation() { return desaturation; }
 
@@ -27,7 +27,7 @@ float get_fire_width() { return fire_width; }
 
 vec2 get_direction() { return direction; }
 
-color_hsl get_color() { return hsl; }
+ColorHsl get_color() { return hsl; }
 
 bool get_snow() { return snow; }
 
@@ -47,7 +47,7 @@ void set_force_x(float x) { direction.x = x; }
 
 void set_force_y(float y) { direction.y = y; }
 
-void set_color(color_hsl col) { hsl = col; }
+void set_color(ColorHsl col) { hsl = col; }
 
 void set_snow(bool val) { snow = val; }
 

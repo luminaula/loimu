@@ -22,8 +22,8 @@ std::unique_ptr<std::jthread> worker_thread;
 std::vector<std::jthread> subworkers;
 
 std::barrier work_barrier(std::thread::hardware_concurrency() + 1);
-std::queue<Rectangle> rects;
-std::mutex rect_mutex;
+std::queue<Rectangle> block_queue;
+std::mutex block_queue_mutex;
 
 using namespace std::literals::chrono_literals;
 
@@ -32,14 +32,14 @@ static void sub_worker(std::stop_token stop_token, int low, int high) {
         work_barrier.arrive_and_wait();
         auto &cur = grids[frame_idx % 2];
         auto &next = grids[(frame_idx + 1) % 2];
-        while (!rects.empty()) {
+        while (!block_queue.empty()) {
             Rectangle rect;
             {
-                std::lock_guard<std::mutex> lk(rect_mutex);
-                rect = std::move(rects.front());
-                if (rects.empty())
+                std::lock_guard<std::mutex> lk(block_queue_mutex);
+                rect = std::move(block_queue.front());
+                if (block_queue.empty())
                     break;
-                rects.pop();
+                block_queue.pop();
             }
             cur.update_particle_block(next, rect);
         }
@@ -58,9 +58,9 @@ static void worker(std::stop_token stop_token) {
         auto &next = grids[(frame_idx + 1) % 2];
         next.clear();
         cur.spawn_fire();
-        auto blocks = next.get_grid();
+        auto blocks = next.get_block_indices();
         {
-            std::lock_guard<std::mutex> lk(rect_mutex);
+            std::lock_guard<std::mutex> lk(block_queue_mutex);
             int dim = std::sqrt(blocks.size());
             for (int i = 0; i < dim; i++) {
                 int j,k;
@@ -73,10 +73,10 @@ static void worker(std::stop_token stop_token) {
                     k = 0;
                 }
                 for (; j < dim; j += 2) {
-                    rects.push(blocks[i * dim + j]);
+                    block_queue.push(blocks[i * dim + j]);
                 }
                 for (; k < dim; k += 2) {
-                    rects.push(blocks[i * dim + k]);
+                    block_queue.push(blocks[i * dim + k]);
                 }
             }
         }

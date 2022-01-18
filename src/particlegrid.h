@@ -44,7 +44,7 @@ class ParticleGrid {
         }
       }
     }
-    std::vector<Rectangle> get_grid(){return grid;}
+    std::vector<Rectangle> get_block_indices(){return grid;}
     ParticleCell &get_cell(int x, int y) { return cells[std::clamp(y, 0, height - 1) * width + std::clamp(x, 0, width - 1)]; }
     void clear() { cells = std::vector<ParticleCell>(width * height); }
     void spawn_fire();
